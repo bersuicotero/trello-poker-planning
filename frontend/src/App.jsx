@@ -8,12 +8,15 @@ import { TrelloCard } from "./components/TrelloCard"
 import { useGlobalCardsState } from "./hooks/useGlobalCardsState"
 import io from "socket.io-client"
 import Toastify from 'toastify-js'
+import MicroModal from 'micromodal';
 
 
 const socket = io('http://localhost:3000/');
 
 function App() {
 
+  MicroModal.init()
+  //MicroModal.show('prueba-dialog')
 
   const confetti = new JSConfetti()
   const { setRole, roleSelected, cardsToEstimate, setCardsToEstimate, selectedCardToEstimate, setOriginList, originList, setDestinationList, destinationList, setSelectedCardToEstimate } = useGlobalCardsState();
@@ -26,6 +29,7 @@ function App() {
   const [players, setPlayers] = useState([])
   const [estimation, setEstimation] = useState("")
   const [sprintPoints, setSprintPoints] = useState(0)
+  const [openModal, setOpenModal] = useState(false)
 
   useEffect(() => {
     if (originList) {
@@ -75,15 +79,7 @@ function App() {
 
   console.log("card from server", selectedCardToEstimate)
   const handleClickModal = (url) => {
-    console.log(url)
-    return (
-      <dialog open>
-        <p>Greetings, one and all!</p>
-        <form method="dialog">
-          <button>OK</button>
-        </form>
-      </dialog>
-    )
+    setOpenModal(true)
   }
   const lists = [
     {
@@ -130,6 +126,12 @@ function App() {
   console.log("Role", roleSelected)
   return (
     <>
+      <dialog open={openModal} id="prueba-dialog">
+        <p>Greetings, one and all!</p>
+        <form method="dialog">
+          <button>OK</button>
+        </form>
+      </dialog>
       <h1 className={classes.h1Title}>Planning Poker</h1>
       <div>
         <form action="">
